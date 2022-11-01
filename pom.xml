@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>kwinten.zaman</groupId>
+	<artifactId>bank.buddy</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	 <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <build.modules.directory>${project.build.directory}/modules</build.modules.directory>
+    </properties>
+
+	<dependencies>
+		<dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.9.1</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<release>17</release>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-jar-plugin</artifactId>
+		        <configuration>
+		            <outputDirectory>${build.modules.directory}</outputDirectory>
+		        </configuration>
+		    </plugin>
+			
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-dependency-plugin</artifactId>
+		        <version>3.1.1</version>
+		        <executions>
+		            <execution>
+		                <id>copy-dependencies</id>
+		            	<phase>generate-resources</phase>
+		            	<goals>
+		              		<goal>copy-dependencies</goal>
+		            	</goals>
+		            	<configuration>
+		            		<excludeGroupIds>org.openjfx</excludeGroupIds>
+		            		<outputDirectory>${build.modules.directory}</outputDirectory>
+		            	</configuration>
+		          	</execution>
+		        </executions>
+		    </plugin>
+			
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-dependency-plugin</artifactId>
+		        <version>3.1.1</version>
+		        <executions>
+		            <execution>
+		                <id>copy-javafx-modules</id>
+		            	<phase>generate-resources</phase>
+		            	<goals>
+		              		<goal>copy-dependencies</goal>
+		            	</goals>
+		            	<configuration>
+		            		<includeGroupIds>org.openjfx</includeGroupIds>
+		            		<includeClassifiers>${javafx.classifier}</includeClassifiers>
+		            		<outputDirectory>${build.modules.directory}</outputDirectory>
+		            	</configuration>
+		          	</execution>
+		        </executions>
+		    </plugin>
+		</plugins>
+	</build>
+	
+	<profiles>
+    	<profile>
+    		<id>windows-profile</id>
+    		<activation>
+    			<os>
+    				<family>windows</family>
+    			</os>
+    		</activation>
+    		<properties>
+    			<javafx.classifier>win</javafx.classifier>
+    		</properties>
+    	</profile>
+    	<profile>
+    		<id>mac-profile</id>
+    		<activation>
+    			<os>
+    				<family>mac</family>
+    			</os>
+    		</activation>
+    		<properties>
+    			<javafx.classifier>mac</javafx.classifier>
+    		</properties>
+    	</profile>
+    </profiles>
+</project>
